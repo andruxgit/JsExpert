@@ -1,40 +1,67 @@
 
 let btn = document.getElementById("play");
-
-function transform() {
-	let arr = [...data];
-	let arr2 = [];
-
-	const fDate = param => {
-		const newDate = new Date(param);
-		const formatDateToNN = myDate => {
-			return myDate < 10 ? '0' + myDate : myDate;
-		};
-		return `${newDate.getFullYear()}/${formatDateToNN(newDate.getMonth())}/${formatDateToNN(newDate.getDate())} ${formatDateToNN(newDate.getHours())}:${formatDateToNN(newDate.getMinutes())}`;
-		};
-
-	arr.splice(5,1);
-	arr.forEach(function(objItem){
-		let newObj = {};
-		for (let key in objItem){
-			if (key !== 'id') newObj[key] = objItem[key];
-		}
-		arr2.push(newObj);
-	});
-	arr2.map(item => {
-		item.name = item.name.slice(0,1) + item.name.slice(1,this.length).toLowerCase();
-		item.url = 'http://' + item.url;
-		item.description = item.description.slice(0,15) + '(...)';
-		item.date = fDate(item.date);
-		item.isVisible = item.params.status + '=>' + item.params.progress;
-	});
-	arr2 = arr2.filter(item => item.isVisible.indexOf('true') !== -1 );
-	function printData (arr){
-		arr.forEach(function (item){
-			console.log(item)
-		});
-
+const fTransf_date = (param) =>{
+	const temp = moment(new Date(param));
+	return temp.format('YYYY/MM/DD hh:mm')
+};
+const fTransf_Name =(str) => {
+	return str[0].toUpperCase() + str.substring(1).toLowerCase();
+};
+const fTransf_Http = (str) => {
+	if (str.indexOf('http://') !== 0) {
+		return `http://' ${str}`;
 	}
-	printData(arr2);
-}
+	return str;
+};
+const fTransf_Descript = (str) => {
+	if (str.length > 15){
+		return `${str.slice(0, 15)}...`;
+	}
+	return str;
+};
+const fTransf_Params = (str1, str2) => {
+	return `${str1}=>${str2}`
+};
+const fTransf_All = (arr) => {
+	return arr.map(item => {
+		return {
+			name: fTransf_Name(item.name),
+			url: fTransf_Http(item.url),
+			description:fTransf_Descript(item.description),
+			date: fTransf_date(item.date),
+			params: fTransf_Params(item.params.status, item.params.progress),
+			isVisible: item.params.status
+		}
+	});
+};
+const fSplice = (arr, p1, p2) => {
+	arr.splice(p1, p2);
+	return arr;
+};
+const fForEach = (arr) => {
+	let arr2 = [];
+	arr.forEach((objItem) => {
+		if (objItem.id){
+			delete objItem.id;
+		}
+		arr2.push(objItem);
+	});
+	return arr2;
+};
+const fFilter = (arr) => {
+    return 	arr.filter(item => item.isVisible !== false )
+};
+const printData = (arr) => {
+	arr.forEach(function (item) {
+		console.log(item)
+	});
+};
+const transform = () => {
+	let arr = data.slice(0);
+	arr = fSplice(arr, 5, 1);
+	arr = fForEach(arr);
+	arr = fTransf_All(arr);
+	arr = fFilter(arr);
+	printData(arr);
+};
 btn.addEventListener("click", transform);
