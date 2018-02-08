@@ -1,26 +1,51 @@
 //Создание галереи тремя способами.
 (function(){
 
-	let btn = document.getElementById("play"),
-		firstBlock = document.querySelector('#first-line'),
-		secondBlock = document.querySelector('#second-line'),
-		thirdBlock = document.querySelector('#third-line');
-
-    //Функция преобразования массива.
-	const fTransfData = (dataObj) => {
-		const funcLength15 = (str) => str.slice(0,15) + '...';
-		const fDate = param => {
-		const newDate = new Date(param);
-		const formatDateToNN = myDate => myDate < 10 ? '0' + myDate : myDate;
-		return `${newDate.getFullYear()}/${formatDateToNN(newDate.getMonth() + 1 )}/${formatDateToNN(newDate.getDate())} 		${formatDateToNN(newDate.getHours())}:${formatDateToNN(newDate.getMinutes())}`;
+	let btn = document.getElementById("play");
+	let DOMElementsLine = {
+		firstBlock: document.querySelector('#first-line'),
+		secondBlock: document.querySelector('#second-line'),
+		thirdBlock: document.querySelector('#third-line')
+	};
+	let DOMElementsGr =
+		{
+			firstBlock: document.querySelector('.first-group'),
+			secondBlock: document.querySelector('.second-group'),
+			thirdBlock: document.querySelector('.third-group')
 		};
-		dataObj.date = fDate(dataObj.date);
-		dataObj.description = funcLength15(dataObj.description);
-		dataObj.url = 'http://' + dataObj.url;
-		return dataObj;
+	//Функции данных
+	const newFormatDateCar =(t)=> {
+		let x = new Date(t);
+		return `${x.getFullYear()}/${x.getMonth() + 1}/${x.getDate()} ${x.getHours()}:${x.getMinutes()}`;
+	};
+	const getDecdrLength15 = (str) => {
+		if (str.length > 15) return str.slice(0,15) + '...';
+		return str;
+	};
+	const getName =(str) => {
+		return str[0].toUpperCase() + str.substring(1).toLowerCase();
+	};
+	const getHttp = (str) => {
+		if (str.indexOf('http://') !== 0) {
+			return `http://${str}`;
+		}
+		return str;
+	};
+	const getStrOfStatusAndProgress = (str1, str2) => {
+		return `${str1}=>${str2}`
+	};
+	const getNewArr = (arr) => {
+			return {
+				name: getName(arr.name),
+				url: getHttp(arr.url),
+				description: getDecdrLength15(arr.description),
+				date: newFormatDateCar(arr.date),
+				params: getStrOfStatusAndProgress(arr.params.status, arr.params.progress),
+				isVisible: arr.params.status
+			}
 	};
 	//Функция создания элемента галереи методом 'replace'
-	const fReplaceMetod = (result,iter) => {
+	const fReplaceMetod = (result, iter) => {
 		let replaceItemTemplate = '<div class="col-sm-3 col-xs-6">\
     	<img src="$url" alt="$name" class="img-thumbnail">\
     	<div class="info-wrapper">\
@@ -37,6 +62,7 @@
 		return result + iter;
 	};
 	//Функция создания элемента галереи методо шаблонных строк.
+
 	const fPaternStrMetod = (result, iter) => {
 		iter = `<div class="col-sm-3 col-xs-6">\
 		 	<img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
@@ -74,43 +100,44 @@
 		divInfoAll.appendChild(divData);
 		divElem.appendChild(imgElem);
 		divElem.appendChild(divInfoAll);
-		thirdBlock.appendChild(divElem);
+		DOMElementsLine.thirdBlock.appendChild(divElem);
 	};
-
 	//Преобразование массива данных к необходимому формату
-	const newData = data.map((iter) => fTransfData(iter));
-
-    //Функция запуска отображения галереи select.options[select.selectedIndex]
+	const newData = data.map((iter) => getNewArr(iter));
+	//Функция изменения массива элементовв зависимости от выбора колличества отображения
+	const fNumElements = (value) => {
+		if (value === '1') return newData.slice(0, 3);
+		else if (value === '2') return newData.slice(0, 6);
+		return newData;
+	};
+	const startSelectMethod = (numMethod, initData) => {
+		if (numMethod === '1'){
+				DOMElementsLine.firstBlock.innerHTML =  initData.reduce((res, iter) => fReplaceMetod (res,iter), '');
+				DOMElementsGr.firstBlock.classList.add("show");
+			}
+			if (numMethod === '2'){
+				DOMElementsLine.secondBlock.innerHTML = initData.reduce((res, iter) => fPaternStrMetod(res,iter), '');
+				DOMElementsGr.secondBlock.classList.add("show");
+			}
+			if ((numMethod === '3')) {
+				initData.map((iter) => galleryByCrElem(iter));
+				DOMElementsGr.thirdBlock.classList.add("show");
+			}
+	};
+	const clearDomeElem = () =>{
+		DOMElementsLine.thirdBlock.innerHTML = '';
+		DOMElementsGr.firstBlock.classList.remove("show");
+		DOMElementsGr.secondBlock.classList.remove("show");
+		DOMElementsGr.thirdBlock.classList.remove("show");
+	};
 	function init() {
-		thirdBlock.innerHTML = '';
-
-		document.querySelector('.first-group').classList.remove("show");
-		document.querySelector('.second-group').classList.remove("show");
-		document.querySelector('.third-group').classList.remove("show");
-		//Функция изменения массива элементовв зависимости от выбора колличества отображения
-		const fNumElements = (value) => {
-			if (value === '1') return newData.slice(0, 3);
-			else if (value === '2') return newData.slice(0, 6);
-			return newData;
-		};
-		// Создание отображаемого массива.
-		const initData = fNumElements(document.getElementById('line-selector').value);
-
+		//очистка элементов страницы
+		clearDomeElem();
+		// Создание размера отображаемого массива.
+		 const initData = fNumElements(document.getElementById('line-selector').value);
 		// выбор и применение методов создания галереи.
-		const selectMethod = document.getElementById('type-selector').value;
-		if (selectMethod === '1'){
-			firstBlock.innerHTML =  initData.reduce((res, iter) => fReplaceMetod (res,iter), '');
-			document.querySelector('.first-group').classList.add("show");
-
-		}
-		if (selectMethod === '2'){
-			secondBlock.innerHTML = initData.reduce((res, iter) => fPaternStrMetod(res,iter), '');
-			document.querySelector('.second-group').classList.add("show");
-		}
-		if ((selectMethod === '3')){
-			initData.map((iter) => galleryByCrElem(iter));
-			document.querySelector('.third-group').classList.add("show");
-		}
-	}
+		const getSelectorMethod = document.getElementById('type-selector').value;
+		startSelectMethod(getSelectorMethod,initData);
+}
 	btn.addEventListener("click", init);
 })();
