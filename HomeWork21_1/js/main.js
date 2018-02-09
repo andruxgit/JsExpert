@@ -1,18 +1,16 @@
 //Создание галереи тремя способами.
 (function(){
-
 	let btn = document.getElementById("play");
 	let DOMElementsLine = {
 		firstBlock: document.querySelector('#first-line'),
 		secondBlock: document.querySelector('#second-line'),
 		thirdBlock: document.querySelector('#third-line')
 	};
-	let DOMElementsGr =
-		{
-			firstBlock: document.querySelector('.first-group'),
-			secondBlock: document.querySelector('.second-group'),
-			thirdBlock: document.querySelector('.third-group')
-		};
+	let DOMElementsGr = {
+		firstBlock: document.querySelector('.first-group'),
+		secondBlock: document.querySelector('.second-group'),
+		thirdBlock: document.querySelector('.third-group')
+	};
 	//Функции данных
 	const newFormatDateCar =(t)=> {
 		let x = new Date(t);
@@ -62,7 +60,6 @@
 		return result + iter;
 	};
 	//Функция создания элемента галереи методо шаблонных строк.
-
 	const fPaternStrMetod = (result, iter) => {
 		iter = `<div class="col-sm-3 col-xs-6">\
 		 	<img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
@@ -114,15 +111,15 @@
 		if (numMethod === '1'){
 				DOMElementsLine.firstBlock.innerHTML =  initData.reduce((res, iter) => fReplaceMetod (res,iter), '');
 				DOMElementsGr.firstBlock.classList.add("show");
-			}
-			if (numMethod === '2'){
-				DOMElementsLine.secondBlock.innerHTML = initData.reduce((res, iter) => fPaternStrMetod(res,iter), '');
-				DOMElementsGr.secondBlock.classList.add("show");
-			}
-			if ((numMethod === '3')) {
-				initData.map((iter) => galleryByCrElem(iter));
-				DOMElementsGr.thirdBlock.classList.add("show");
-			}
+		}
+		if (numMethod === '2'){
+			DOMElementsLine.secondBlock.innerHTML = initData.reduce((res, iter) => fPaternStrMetod(res,iter), '');
+			DOMElementsGr.secondBlock.classList.add("show");
+		}
+		if ((numMethod === '3')) {
+			initData.forEach((iter) => galleryByCrElem(iter));
+			DOMElementsGr.thirdBlock.classList.add("show");
+		}
 	};
 	const clearDomeElem = () =>{
 		DOMElementsLine.thirdBlock.innerHTML = '';
