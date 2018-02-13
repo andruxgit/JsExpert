@@ -99,4 +99,9 @@ var data = [{
 	},
 	description : "Lorem ipsum dolor sit amet",
 	date : 1322159200637
-}]
+}];
+
+const newFormatDateCar =(t)=> {
+	let x = new Date(t);
+	return `${x.getFullYear()}/${x.getMonth() + 1}/${x.getDate()} ${x.getHours()}:${x.getMinutes()}`;
+};

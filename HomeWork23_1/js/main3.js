@@ -45,7 +45,7 @@
 	//Функция создания элемента галереи методом 'replace'
 	const fReplaceMetod = (result, iter) => {
 		let replaceItemTemplate = '<div class="col-sm-3 col-xs-6">\
-    	<img src="img.jpg" alt="$name" class="img-thumbnail">\
+    	<img src="$url" alt="$name" class="img-thumbnail">\
     	<div class="info-wrapper">\
 		<div class="text-muted">$name</div>\
     	<div class="text-muted top-padding">$description</div>\
@@ -54,7 +54,7 @@
     	</div>';
 		iter = replaceItemTemplate
 		.replace(/\$name/gi, iter.name)
-		.replace("img.jpg", iter.url)
+		.replace("$url", iter.url)
 		.replace("$description", iter.description)
 		.replace("$date", iter.date);
 		return result + iter;
@@ -100,12 +100,12 @@
 		DOMElementsLine.thirdBlock.appendChild(divElem);
 	};
 	//Преобразование массива данных к необходимому формату
-	const newData = (data) => data.map((iter) => getNewArr(iter));
+	const newData = data.map((iter) => getNewArr(iter));
 	//Функция изменения массива элементовв зависимости от выбора колличества отображения
 	const fNumElements = (value) => {
-		if (value === '1') return newData(data.slice(0, 3));
-		else if (value === '2') return newData(data.slice(0, 6));
-		return newData(data);
+		if (value === '1') return newData.slice(0, 3);
+		else if (value === '2') return newData.slice(0, 6);
+		return newData;
 	};
 	const startSelectMethod = (numMethod, initData) => {
 		if (numMethod === '1'){
@@ -117,12 +117,13 @@
 			DOMElementsGr.secondBlock.classList.add("show");
 		}
 		if ((numMethod === '3')) {
+			DOMElementsLine.thirdBlock.innerHTML = '';
 			initData.forEach((iter) => galleryByCrElem(iter));
 			DOMElementsGr.thirdBlock.classList.add("show");
 		}
 	};
 	const clearDomeElem = () =>{
-		DOMElementsLine.thirdBlock.innerHTML = '';
+
 		DOMElementsGr.firstBlock.classList.remove("show");
 		DOMElementsGr.secondBlock.classList.remove("show");
 		DOMElementsGr.thirdBlock.classList.remove("show");
