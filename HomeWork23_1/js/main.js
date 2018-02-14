@@ -33,29 +33,56 @@
 			isVisible: obj.params.status
 		}
 	};
-	const newData = (data) => data.map((iter) => getChangeObj(iter));
-	const fPaternStrMetod = (result, iter) => {
-		iter = `<div class="col-sm-3 col-xs-6">\
-		 	<img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
+	//const newData = (data) => data.map((iter) => getChangeObj(iter));
+	const GetPaternStrMetod = (obj) => {
+		result = `<div class="col-sm-3 col-xs-6">\
+		 	<img src="${obj.url}" alt="${obj.name}" class="img-thumbnail">\
 		 	<div class="info-wrapper">\
-		 		<div class="text-muted">${iter.name}</div>\
-		 		<div class="text-muted top-padding">${iter.description}</div>\
-	      		<div class="text-muted">${iter.date}</div>\
+		 		<div class="text-muted">${obj.name}</div>\
+		 		<div class="text-muted top-padding">${obj.description}</div>\
+	      		<div class="text-muted">${obj.date}</div>\
 	      		<div class="text-muted"><button>delete</button></div>\
 		 	</div>\
 		 </div>`;
-		return result + iter;
+		return result;
 	};
+
+	const makeCounter = () => {
+	   let privateCounter = -1;
+	   const changeBy = (val) =>{
+		   privateCounter += val;
+	   };
+	   return {
+		   increment: () => {
+		   	changeBy(1);
+		   },
+		   decrement: () => {
+		   	changeBy(-1);
+		   },
+		   value: () => {
+		   	return privateCounter;
+		   }
+	   }
+    };
+	let counter = makeCounter();
+
 	// const clearDomeElem = (varClass) => {
 	// 	document.querySelector(varClass).classList.add("hide");
 	// };
-	function init() {
-		//очистка элементов страницы
-		//clearDomeElem('.first-group');
-		DOMElementsLine.innerHTML = newData(data).reduce((res, iter) => fPaternStrMetod(res,iter), '');
-		//DOMElementsLine.innerHTML += '';
-		document.querySelector('.first-group').classList.add("show");
-	}
+	// function init() {
+	// 	//очистка элементов страницы
+	// 	//clearDomeElem('.first-group');
+	// 	DOMElementsLine.innerHTML = newData(data).reduce((res, iter) => fPaternStrMetod(res,iter), '');
+	// 	//DOMElementsLine.innerHTML += '';
+	// 	document.querySelector('.first-group').classList.add("show");
+	// }
+	const addElem = () => {
+		const addObj = data[counter.value()];
+		const changeAddObj = getChangeObj(addObj);
+		DOMElementsLine.innerHTML += GetPaternStrMetod(changeAddObj);
+		if (counter.value() === 0){document.querySelector('.first-group').classList.add("show");}
+	};
 
-	btn.addEventListener("click", init);
+	btn.addEventListener("click", counter.increment);
+	btn.addEventListener("click", addElem);
 })();
