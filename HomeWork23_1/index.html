@@ -3,12 +3,12 @@
 
 <head>
 	<meta charset="utf-8">
+	<!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 	<title>JS/Expert Example</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -36,67 +36,24 @@
 		</div>
 	</nav>
 
-	<div class="site-wrapper">
-		<div class="container">
-			<div class="row text-center first-group hide">
-				<div class="col-md-12">
-					<h3>Галлерея построенная с помощью шаблонных строк</h3>
-					<!--<h3>Галлерея построенная с помощью replace</h3>-->
-				</div>
-				<div class="col-md-12">
-					<div id="first-line"></div>
-				</div>
-			</div>
-			
-			<!--<div class="row text-center second-group hide">-->
-				<!--<div class="col-md-12">-->
-					<!--<h3>Галлерея построенная с помощью шаблонных строк</h3>-->
-				<!--</div>-->
-				<!--<div class="col-md-12">-->
-					<!--<div id="second-line"></div>-->
-				<!--</div>-->
-			<!--</div>-->
-			
-			<!--<div class="row text-center third-group hide">-->
-				<!--<div class="col-md-12">-->
-					<!--<h3>Галлерея построенная с помощью createElement</h3>-->
-				<!--</div>-->
-				<!--<div class="col-md-12">-->
-					<!--<div id="third-line"></div>-->
-				<!--</div>-->
-			<!--</div>-->
-
-            <div class="row text-center">
-                <!--<div class="col-lg-4 col-md-4"></div>-->
-                <!--<div class="col-lg-4 col-md-4">-->
-					<!--<select id="type-selector" class="form-control">-->
-					  <!--<option default value="0">-Выберите один из вариантов-</option>-->
-                      <!--<option value="1">Использовать replace</option>-->
-                      <!--<option value="2">Использовать шаблонные строки</option>-->
-					  <!--<option value="3">Использовать createElement</option>-->
-					<!--</select>-->
-
-
-                <!--</div>-->
-                <!--<div class="col-lg-4 col-md-4">-->
-						<!--<select id="line-selector" class="form-control count-selector">-->
-								<!--<option default value="0">Все</option>-->
-								<!--<option value="1">Три картинки</option>-->
-								<!--<option value="2">Шесть картинок</option>-->
-							  <!--</select>-->
-						<!--<br><br>-->
-				<!--</div>-->
-             
-            
-				<div class="col-lg-12 col-md-12">
-					<div class="btn btn-primary" id="play">Добавить изображение</div>
-				    <br><br>
-				</div>
-			</div>
-
+	<div class="site-wrapper container">
+		<div class="row text-center first-group">
+			<h3>Галерея</h3>
+			<div class="btn btn-primary" id="play">Добавить изображение</div>
+			<p id="countElements"></p>
+			<select id="line-selector"  title="Sort">
+				<option>Выбор сортировки</option>
+				<option value="1">По имени А- Я</option>
+				<option value="2">По имени Я — А</option>
+				<option value="3">Сначала новые</option>
+				<option value="4">Сначала старые</option>
+			</select>
+			<br><br>
 		</div>
+		<div id="first-line" class="col-md-12"></div>
 	</div>
-	<script src="js/data.js"></script>
-	<script src="js/main.js"></script>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
