@@ -3,10 +3,10 @@
 
 <head>
 	<meta charset="utf-8">
-	<!--<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 	<title>JS/Expert Example</title>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -41,7 +41,7 @@
 			<h3>Галерея</h3>
 			<div class="btn btn-primary" id="play">Добавить изображение</div>
 			<p id="countElements"></p>
-			<select id="line-selector"  title="Sort">
+			<select id="selectSort"  title="Sort">
 				<option>Выбор сортировки</option>
 				<option value="1">По имени А- Я</option>
 				<option value="2">По имени Я — А</option>
@@ -53,7 +53,28 @@
 		<div id="first-line" class="col-md-12"></div>
 	</div>
 
-<script src="js/data.js"></script>
-<script src="js/main.js"></script>
+	<div id="myModalBox" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- Заголовок модального окна -->
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title">Техническая поддержка</h4>
+				</div>
+				<!-- Основное содержимое модального окна -->
+				<div class="modal-body">
+					Обновите страницу
+				</div>
+				<!-- Футер модального окна -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+				</div>
+			</div>
+		</div>
+</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/data.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

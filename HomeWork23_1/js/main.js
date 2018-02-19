@@ -1,8 +1,9 @@
 
 (function() {
-	let btn = document.getElementById("play");
+	let btn = document.querySelector("#play");
 	let DOMElementsLine = document.querySelector('#first-line');
-	let DOMElementCounter = document.getElementById('countElements');
+	let DOMElementCounter = document.querySelector("#countElements");
+	let DomSelectElem = document.querySelector('#selectSort');
 
 	const newFormatDateCar =(t)=> {
 		let x = new Date(t);
@@ -34,7 +35,7 @@
 			isVisible: obj.params.status
 		}
 	};
-	const GetPaternStrMetod = (obj,num) => {
+	const getPaternStrForObj = (obj,num) => {
 		 return `<div class="col-sm-3 col-xs-6">\
 		 	<img src="${obj.url}" alt="${obj.name}" class="img-thumbnail">\
 		 	<div class="info-wrapper">\
@@ -45,7 +46,7 @@
 		 	</div>\
 		 </div>`;
 	};
-	const resultPaternStrMetod = (result, iter, num) => {
+	const getPaternStrMetodForArr = (result, iter, num) => {
 				iter = `<div class="col-sm-3 col-xs-6">\
 		 	        <img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
 		 	        <div class="info-wrapper">\
@@ -83,31 +84,54 @@
 				deletedArr.push(visibleArr.splice(num,1));
 		    },
 		    addedElements: visibleArr.length,
-			arrElements: visibleArr
-			// deletedElements: () => {
-			// 	return deletedArr.splice();
-			//}
+			arrElements: visibleArr,
+			 sortAb: ()=>{
+				return visibleArr.sort((a,b) => {return a.name > b.name})
+			},
+			sortBa: ()=>{
+				return visibleArr.sort((a,b) => {return a.name < b.name})
+			},
+			sortNewFirst: () => {
+				return visibleArr.sort((a,b) => {
+					return (new Date(a.date).getTime()) < (new Date(b.date).getTime())})
+			},
+			sortNewOld: () => {
+				return visibleArr.sort((a,b) => {
+					return (new Date(a.date).getTime()) > (new Date(b.date).getTime())})
+			}
 	    }
 	};
 	let galeryElements = getVisibleArr();
-
+	const getMethodSort = (num) => {
+		if (num === '1') {
+			DOMElementsLine.innerHTML = galeryElements.sortAb().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		}
+		if (num === '2') {
+			DOMElementsLine.innerHTML = galeryElements.sortBa().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		}
+		if (num === '3') {
+			DOMElementsLine.innerHTML = galeryElements.sortNewFirst().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		}
+		if (num === '4') {
+			DOMElementsLine.innerHTML = galeryElements.sortNewOld().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		}
+	};
 	const addElem = () => {
 		counter.increment();
 		if ((counter.value()) > data.length - 1){
-			return alert('all');
+				return jQuery("#myModalBox").modal('show');
 		}
         if ((counter.value()) <= data.length - 1) {
 			const addObj = data[counter.value()];
 			const changeAddObj = getChangeObj(addObj);
-			DOMElementsLine.innerHTML += GetPaternStrMetod(changeAddObj, counter.value());
+			DOMElementsLine.innerHTML += getPaternStrForObj(changeAddObj, counter.value());
 			galeryElements.addElem(changeAddObj);
 			DOMElementCounter.innerHTML = `Добавленно изображений ${counter.value() + 1}`;
 			if (counter.value() === 0) {
-				document.querySelector('.first-group').classList.add("show");
+				return document.querySelector('.first-group').classList.add("show");
 			}
 		}
 		if (counter.value() === data.length - 1) {
-			//btn.removeEventListener("click", addElem);
         	btn.textContent = `Галерея закончилась`;
         	btn.style.backgroundColor = 'grey';
         }
@@ -118,9 +142,13 @@
 			galeryElements.delElem(event.target.id);
 			DOMElementsLine.innerHTML = '';
 			DOMElementsLine.innerHTML = galeryElements.arrElements.reduce((res, iter) =>
-				resultPaternStrMetod(res, iter, galeryElements.arrElements.indexOf(iter) ), '');
+				getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter) ), '');
 		}
 	};
+	document.addEventListener('DOMContentLoaded',()=>{
+		console.log('start')
+	});
 	btn.addEventListener("click", addElem);
-	DOMElementsLine.addEventListener('click', delElem);
+	DOMElementsLine.addEventListener("click", delElem);
+	DomSelectElem.addEventListener('change', getMethodSort(DomSelectElem.value));
 })();
