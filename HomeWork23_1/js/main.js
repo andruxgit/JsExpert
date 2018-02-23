@@ -50,17 +50,9 @@
 		 </div>`;
 	};
 	//создание шаблонной строки дя перестройки элементов галереи (для reduce)
-	const getPaternStrMetodForArr = (result, iter, num) => {
-				iter = `<div class="col-sm-3 col-xs-6">\
-		 	        <img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
-		 	        <div class="info-wrapper">\
-		 	        	<div class="text-muted">${iter.name}</div>\
-		 	        	<div class="text-muted top-padding">${iter.description}</div>\
-	      	        	<div class="text-muted">${iter.date}</div>\
-	      	        	<div class="text-muted"><button id=${num}>Удалить</button></div>\
-		 	        </div>\
-		        </div>`;
-		return result + iter;
+	const getPaternStrMetodForArr = (result, obj, num) => {
+		let strObj = getPaternStrForObj(obj,num);
+		return result + strObj;
 	};
 	//конструктор счетчика добавленных элементов
 	const makeCounter = () => {
@@ -90,18 +82,23 @@
 		    addedElements: visibleArr.length,
 			arrElements: visibleArr,
 			 sortAb: ()=>{
-				return visibleArr.sort((a,b) => {return a.name > b.name})
+				return visibleArr.sort((a,b) => {
+					return a.name > b.name
+				})
 			},
 			sortBa: ()=>{
-				return visibleArr.sort((a,b) => {return a.name < b.name})
+				return visibleArr.sort((a,b) => {
+					return a.name < b.name})
 			},
 			sortNewFirst: () => {
 				return visibleArr.sort((a,b) => {
-					return (new Date(a.date).getTime()) < (new Date(b.date).getTime())})
+					return (new Date(a.date).getTime()) < (new Date(b.date).getTime())
+				})
 			},
 			sortNewOld: () => {
 				return visibleArr.sort((a,b) => {
-					return (new Date(a.date).getTime()) > (new Date(b.date).getTime())})
+					return (new Date(a.date).getTime()) > (new Date(b.date).getTime())
+				})
 			}
 	    }
 	};
@@ -110,18 +107,23 @@
 	//разная сортировка элементов по выбранному виду сортировки
 	const getMethodSort = (num) => {
 		localStorage['valSortStorage'] = num;
+		let arrGallery = [];
 		if (num === '1') {
-			DOMElementsLine.innerHTML = galeryElements.sortAb().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+			arrGallery = galeryElements.sortAb();
 		}
-		if (num === '2') {
-			DOMElementsLine.innerHTML = galeryElements.sortBa().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		else if (num === '2') {
+			arrGallery = galeryElements.sortBa();
 		}
-		if (num === '3') {
-			DOMElementsLine.innerHTML = galeryElements.sortNewFirst().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		else if (num === '3') {
+			arrGallery = galeryElements.sortNewFirst();
 		}
-		if (num === '4') {
-			DOMElementsLine.innerHTML = galeryElements.sortNewOld().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
+		else if (num === '4') {
+			arrGallery = galeryElements.sortNewOld();
 		}
+		else{
+			arrGallery = galeryElements.arrElements;
+		}
+		DOMElementsLine.innerHTML = arrGallery.reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
 	};
 	//добавление элемента галереи
 	//вызов модального окна
