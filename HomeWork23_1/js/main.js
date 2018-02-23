@@ -4,7 +4,8 @@
 	let DOMElementsLine = document.querySelector('#first-line');
 	let DOMElementCounter = document.querySelector("#countElements");
 	let DomSelectElem = document.querySelector('#selectSort');
-
+	let valSortFromStorage = 0;
+	//функции для модификации входных данных
 	const newFormatDateCar =(t)=> {
 		let x = new Date(t);
 		return `${x.getFullYear()}/${x.getMonth() + 1}/${x.getDate()} ${x.getHours()}:${x.getMinutes()}`;
@@ -25,6 +26,7 @@
 	const getStrOfStatusAndProgress = (str1, str2) => {
 		return `${str1}=>${str2}`
 	};
+	//Модификация входных данных.
 	const getChangeObj = (obj) => {
 		return {
 			name: getName(obj.name),
@@ -35,6 +37,7 @@
 			isVisible: obj.params.status
 		}
 	};
+	//создание шаблонной строки дя вывода одного элемента галереи.
 	const getPaternStrForObj = (obj,num) => {
 		 return `<div class="col-sm-3 col-xs-6">\
 		 	<img src="${obj.url}" alt="${obj.name}" class="img-thumbnail">\
@@ -42,10 +45,11 @@
 		 		<div class="text-muted">${obj.name}</div>\
 		 		<div class="text-muted top-padding">${obj.description}</div>\
 	      		<div class="text-muted">${obj.date}</div>\
-	      		<div class="text-muted"><button id=${num}>delete</button></div>\
+	      		<div class="text-muted"><button id=${num}>Удалить</button></div>\
 		 	</div>\
 		 </div>`;
 	};
+	//создание шаблонной строки дя перестройки элементов галереи (для reduce)
 	const getPaternStrMetodForArr = (result, iter, num) => {
 				iter = `<div class="col-sm-3 col-xs-6">\
 		 	        <img src="${iter.url}" alt="${iter.name}" class="img-thumbnail">\
@@ -53,26 +57,26 @@
 		 	        	<div class="text-muted">${iter.name}</div>\
 		 	        	<div class="text-muted top-padding">${iter.description}</div>\
 	      	        	<div class="text-muted">${iter.date}</div>\
-	      	        	<div class="text-muted"><button id=${num}>delete</button></div>\
+	      	        	<div class="text-muted"><button id=${num}>Удалить</button></div>\
 		 	        </div>\
 		        </div>`;
 		return result + iter;
 	};
+	//конструктор счетчика добавленных элементов
 	const makeCounter = () => {
-	   let privateCounter = -1;
-	   const changeBy = (val) =>{
-		   privateCounter += val;
-	   };
-	   return {
-		   increment: () => {
-		   	changeBy(1);
-		   },
-		   value: () => {
-		   	return privateCounter;
-		   }
-	   }
-    };
+		let privateCounter = -1;
+		return {
+			increment: () => {
+				privateCounter += 1;
+			},
+			value: () => {
+				return privateCounter;
+			}
+		}
+	};
+	//счетчик
 	let counter = makeCounter();
+	//конструктор функции массива видимых элементов галереи
 	const getVisibleArr = () => {
 		let visibleArr = [];
 		let deletedArr = [];
@@ -101,8 +105,11 @@
 			}
 	    }
 	};
+	//массив видимых элементов галереи
 	let galeryElements = getVisibleArr();
+	//разная сортировка элементов по выбранному виду сортировки
 	const getMethodSort = (num) => {
+		localStorage['valSortStorage'] = num;
 		if (num === '1') {
 			DOMElementsLine.innerHTML = galeryElements.sortAb().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
 		}
@@ -116,6 +123,9 @@
 			DOMElementsLine.innerHTML = galeryElements.sortNewOld().reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
 		}
 	};
+	//добавление элемента галереи
+	//вызов модального окна
+	//учет значения вида сортировки в local storage
 	const addElem = () => {
 		counter.increment();
 		if ((counter.value()) > data.length - 1){
@@ -127,8 +137,9 @@
 			DOMElementsLine.innerHTML += getPaternStrForObj(changeAddObj, counter.value());
 			galeryElements.addElem(changeAddObj);
 			DOMElementCounter.innerHTML = `Добавленно изображений ${counter.value() + 1}`;
+			getMethodSort(localStorage['valSortStorage']);
 			if (counter.value() === 0) {
-				return document.querySelector('.first-group').classList.add("show");
+				 document.querySelector('.first-group').classList.add("show");
 			}
 		}
 		if (counter.value() === data.length - 1) {
@@ -136,6 +147,7 @@
         	btn.style.backgroundColor = 'grey';
         }
 	};
+	//удаление элемента галереи
 	const delElem = (event) => {
 		const target = event.target.tagName;
 		if (target === 'BUTTON') {
@@ -145,10 +157,14 @@
 				getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter) ), '');
 		}
 	};
+	//события загрузки, добавления, удаления, выбора сортировки
 	document.addEventListener('DOMContentLoaded',()=>{
-		console.log('start')
+		if (localStorage['valSortStorage']) {
+			valSortFromStorage = localStorage['valSortStorage'];
+		}
 	});
 	btn.addEventListener("click", addElem);
 	DOMElementsLine.addEventListener("click", delElem);
-	DomSelectElem.addEventListener('change', getMethodSort(DomSelectElem.value));
+	console.log('start sort');
+	DomSelectElem.addEventListener('change', () => getMethodSort(DomSelectElem.value));
 })();
