@@ -54,6 +54,20 @@
 		let strObj = getPaternStrForObj(obj,num);
 		return result + strObj;
 	};
+	//конструктор счетчика добавленных элементов
+	const makeCounter = () => {
+		let privateCounter = -1;
+		return {
+			increment: () => {
+				privateCounter += 1;
+			},
+			value: () => {
+				return privateCounter;
+			}
+		}
+	};
+	//счетчик
+	let counter = makeCounter();
 	//конструктор функции массива видимых элементов галереи
 	const getVisibleArr = () => {
 		let visibleArr = [];
@@ -65,18 +79,14 @@
 		    delElem: (num) => {
 				deletedArr.push(visibleArr.splice(num,1));
 		    },
-		    addedElements:  () =>{
-				return visibleArr.length
-			},
-			arrElements: () => {
-				return visibleArr;
-			},
-			 sortAb: () => {
+		    addedElements: visibleArr.length,
+			arrElements: visibleArr,
+			 sortAb: ()=>{
 				return visibleArr.sort((a,b) => {
 					return a.name > b.name
 				})
 			},
-			sortBa: () => {
+			sortBa: ()=>{
 				return visibleArr.sort((a,b) => {
 					return a.name < b.name})
 			},
@@ -113,31 +123,28 @@
 		else{
 			arrGallery = galeryElements.arrElements;
 		}
-		DOMElementsLine.innerHTML = arrGallery.reduce((res, iter) => getPaternStrMetodForArr(res, iter, arrGallery.indexOf(iter)), '');
+		DOMElementsLine.innerHTML = arrGallery.reduce((res, iter) => getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter)), '');
 	};
 	//добавление элемента галереи
 	//вызов модального окна
 	//учет значения вида сортировки в local storage
 	const addElem = () => {
-		let valVisibleElem = 0;
-		if (galeryElements.addedElements() > 0) {
-			valVisibleElem = galeryElements.addedElements();
-		}
-		if ((valVisibleElem) > data.length - 1){
+		counter.increment();
+		if ((counter.value()) > data.length - 1){
 				return jQuery("#myModalBox").modal('show');
 		}
-        if ((valVisibleElem) <= data.length - 1) {
-			const addObj = data[valVisibleElem];
+        if ((counter.value()) <= data.length - 1) {
+			const addObj = data[counter.value()];
 			const changeAddObj = getChangeObj(addObj);
-			DOMElementsLine.innerHTML += getPaternStrForObj(changeAddObj, valVisibleElem);
+			DOMElementsLine.innerHTML += getPaternStrForObj(changeAddObj, counter.value());
 			galeryElements.addElem(changeAddObj);
-			DOMElementCounter.innerHTML = `Добавленно изображений ${valVisibleElem + 1}`;
+			DOMElementCounter.innerHTML = `Добавленно изображений ${counter.value() + 1}`;
 			getMethodSort(localStorage['valSortStorage']);
-			if (valVisibleElem === 0) {
+			if (counter.value() === 0) {
 				 document.querySelector('.first-group').classList.add("show");
 			}
 		}
-		if (valVisibleElem === data.length - 1) {
+		if (counter.value() === data.length - 1) {
         	btn.textContent = `Галерея закончилась`;
         	btn.style.backgroundColor = 'grey';
         }
@@ -145,12 +152,11 @@
 	//удаление элемента галереи
 	const delElem = (event) => {
 		const target = event.target.tagName;
-		let arrGallery = galeryElements.arrElements();
 		if (target === 'BUTTON') {
 			galeryElements.delElem(event.target.id);
 			DOMElementsLine.innerHTML = '';
-			DOMElementsLine.innerHTML = arrGallery.reduce((res, iter) =>
-				getPaternStrMetodForArr(res, iter, arrGallery.indexOf(iter) ), '');
+			DOMElementsLine.innerHTML = galeryElements.arrElements.reduce((res, iter) =>
+				getPaternStrMetodForArr(res, iter, galeryElements.arrElements.indexOf(iter) ), '');
 		}
 	};
 	//события загрузки, добавления, удаления, выбора сортировки
@@ -161,5 +167,6 @@
 	});
 	btn.addEventListener("click", addElem);
 	DOMElementsLine.addEventListener("click", delElem);
+	console.log('start sort');
 	DomSelectElem.addEventListener('change', () => getMethodSort(DomSelectElem.value));
 })();

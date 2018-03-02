@@ -105,17 +105,3 @@ var data = [{
 // 	let x = new Date(t);
 // 	return `${x.getFullYear()}/${x.getMonth() + 1}/${x.getDate()} ${x.getHours()}:${x.getMinutes()}`;
 // };
-//конструктор счетчика добавленных элементов
-// const makeCounter = () => {
-// 	let privateCounter = -1;
-// 	return {
-// 		increment: () => {
-// 			privateCounter += 1;
-// 		},
-// 		value: () => {
-// 			return privateCounter;
-// 		}
-// 	}
-// };
-//счетчик
-//let counter = makeCounter();
