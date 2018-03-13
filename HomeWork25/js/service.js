@@ -1,10 +1,18 @@
 'use strict';
-(function init (){
-	const DOMauthPage = ` 
-<div id = 'main-context' class="col-md-4 col-12 col-md-offset-4" role="main">
+
+let loginModule = (function init () {
+
+	function setLogAndPass (log,pass) {
+		localStorage.setItem('emailValid',log );
+		localStorage.setItem('passValid', pass);
+	}
+	//окно авторизации
+	const getDOMauthPage = () => {
+		return `
+       <div id = 'main-context' class="col-md-4 col-12 col-md-offset-4" role="main">
           <div class = "col-center">
               <div id = "wrap-modal"  class="alert alert-danger" role="alert">
-                  This is a danger alert—check it out!
+                  Alert
               </div>
           </div>
           <form id = "form-input" class="form well">
@@ -16,21 +24,23 @@
               <input type="text" id="input-pass" class="form-control col" placeholder="Password" required=""
                      autocomplete="off">
                   <button id ="auth-button" class="btn btn-lg btn-primary btn-block" type="button">Авторизация</button>
-          </form>
-      </div>`;
-	const DOMuserPage =  `
-      <div class = " well userContent col-md-6  col-md-offset-3 col-12 col-offset-0">
+           </form>
+       </div>`;
+    };
+	//окно данных пользователя
+	const DOMuserPage = (log,hidePass) => {
+		return `<div class = " well userContent col-md-6  col-md-offset-3 col-12 col-offset-0">
           <div class="row">
               <h1 class="h3 font-weight-normal text-center ">Информация о пользователе</h1>
           </div>
           <div class="row infoBlok">
               <div class="col-md-5 text-center">
                   <label for = "otputEmail" class = "control-label">Логин</label>
-                  <input type="text" id="otputEmail" class="form-control" placeholder="Email address">
+                  <input type="text" id="otputEmail" class="form-control" placeholder="Email address" value = ${log}>
               </div>
               <label for = "userPassword" class = "control-label">Пароль</label>
               <div class = "input-group container-fluid">
-                   <input type="text" id="userPassword" class="form-control" placeholder = "Password">
+                   <input type="text" id="userPassword" class="form-control" placeholder = "Password" value =${hidePass}>
                     <span class = "input-group-btn">
                         <button id="btnHide" class="btn btn-primary btn-block" type="button">Показать
                     пароль</button>
@@ -43,20 +53,7 @@
                 </div>
            </div>
        </div>`;
-
-	const DOMmain = document.querySelector('#mainPage');
-	localStorage.setItem('emailValid','t@t.ru' );
-	localStorage.setItem('passValid', '12');
-	DOMmain.innerHTML = DOMauthPage;
-
-	const DOMinputPass = document.querySelector('#input-pass');
-	const DOMinputEmail = document.querySelector('#input-email');
-	const DOMtestButton = document.querySelector('#auth-button');
-	const DOMwrapModal = document.querySelector('#wrap-modal');
-
-	DOMwrapModal.style.visibility = "hidden";
-
-
+	};
 	//проверка пароля или почты на соответствие заданному ранее
 	const checkValid = (valIn,valValid) => {
 				if ((!!valIn) && (!!valValid)) return (valIn !== valValid);
@@ -67,8 +64,8 @@
 	};
 	//получение данных из local storage
 	let getDataLocal = (function(){
-		let passValid = localStorage.getItem('passValid');
 		let emailValid = localStorage.getItem('emailValid');
+		let passValid = localStorage.getItem('passValid');
 		return {
 			passValid: function() {
 				return passValid;
@@ -78,62 +75,93 @@
 			}
 		}
 	})();
-	//получение значения поля пароля
-	const getInputEmail = () => {
-		return DOMinputEmail.value;
+	//получение значения поля
+	const getObjVal = (DOMobj) => {
+		return DOMobj.value;
 	};
-	const getInputPass = () => {
-		return DOMinputPass.value;
+	//надпись в модальном окне
+	const SetModalText = (DOMobjModal,str) => {
+		DOMobjModal.innerHTML = str;
 	};
-	const SetModalText = (str) => {
-		DOMwrapModal.innerHTML = str
+	//открытие-закрытие модального окна
+	 const closeModal = (DOMobj) => {
+		 DOMobj.style.visibility ='hidden'
+	 };
+	const openModal = (DOMobj,str) => {
+		SetModalText(DOMobj,str);
+		DOMobj.style.visibility ='visible'
 	};
-	//открытие-закрытие модального окна document.getElementById(id).style.display == "none")
-	const closeModal = () => {
-		DOMwrapModal.style.visibility ='hidden'
+	//очистка формы
+	const clearPage = (DOMobj) => {
+		DOMobj.innerHTML = '';
 	};
-	const openModal = (str) => {
-		SetModalText(str);
-		DOMwrapModal.style.visibility ='visible'
-
+	//отображение формы
+	const createPage = (DOMobj,log,hidePass) => {
+		DOMobj.innerHTML = DOMuserPage(log,hidePass);
 	};
-	// const ready = () => {
-	// };
-	const clearPage = () => {
-		DOMmain.innerHTML ='';
-	};
-	const createPage = () => {
-		DOMmain.innerHTML = DOMuserPage;
-	};
+	//валидность логина
 	const isValidEmail = (val) => {
 	let reg = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 	return reg.test(val);
 	};
-	const submitForm =() => {
-		const inputPass = getInputPass();
-		const inputEmail = getInputEmail();
+	const getHidePass = (pass) => {
+		return pass.replace(/[\s\S]/g, "*")
+	};
+
+	//инициализация страницы пользователя
+	const initUserPage = (page,log,pass) => {
+		let hidePass = getHidePass(pass);
+		createPage(page,log,hidePass);
+		const DOMsubmitBack = document.querySelector('#btnComeBack');
+		const DOMsubmitHidePass = document.querySelector('#btnHide');
+		const DOMuserPass = document.querySelector('#userPassword');
+		DOMsubmitHidePass.addEventListener('click', () => {
+			DOMsubmitHidePass.innerHTML = (DOMsubmitHidePass.innerHTML === 'Показать пароль')? 'Скрыть Пароль': 'Показать пароль';
+			DOMuserPass.value =(DOMuserPass.value === pass)? getHidePass(pass): pass;
+		});
+		DOMsubmitBack.addEventListener('click', ()=>{
+			clearPage(page);
+			initComponent()
+		});
+		console.log('initUserPage' + log + pass)
+	};
+	//проверка данных пользователя
+	const submitForm =(DOMobjPage,DOMobjModal,DOMobjLog,DOMobjPass) => {
+		const inputPass = getObjVal(DOMobjPass);
+		const inputEmail = getObjVal(DOMobjLog);
 		const localPass = getDataLocal.passValid();
 		const localEmail = getDataLocal.emailValid();
 		if ((checkFormIn(inputPass) || checkFormIn(inputEmail))|| (!isValidEmail(inputEmail))) {
-			return  openModal('форма заполнена неверно')
+			return  openModal(DOMobjModal,'форма заполнена неверно')
 		}
 		else if  (checkValid(inputPass, localPass ) || checkValid(inputEmail, localEmail)) {
-			return openModal('Ошибка логина или пароля')
+			console.log(inputPass, localPass);
+			console.log(inputEmail, localEmail);
+			return openModal(DOMobjModal,'Ошибка логина или пароля')
 		}
-		return (()=>{
-			clearPage();
-			createPage();
-		})()
-	};
-	DOMtestButton.addEventListener('click', submitForm);
+			clearPage(DOMobjPage);
 
-//	document.addEventListener("DOMContentLoaded", ready);
-	//DOMtestButton.addEventListener('click', submitForm);
-	//DOMtestButton.addEventListener('click', ()=>{
-		// DOMwrapModal.style.visibility ='visible';
-		//console.log(DOMinputEmail.value);
-	//console.log(isValidEmail(DOMinputEmail.value));
-	// clearPage();
-	// createPage();
-	//});
+			return initUserPage(DOMobjPage,inputEmail,inputPass);
+	};
+	//инициализация окна авторизации
+	function initComponent (){
+		const DOMmain = document.querySelector('#mainPage');
+		DOMmain.innerHTML = getDOMauthPage();
+		const DOMauthButton = document.querySelector('#auth-button');
+		const DOMwrapModal = document.querySelector('#wrap-modal');
+		const DOMinputPass = document.querySelector('#input-pass');
+		const DOMinputEmail = document.querySelector('#input-email');
+
+		closeModal(DOMwrapModal);
+		const submitEvent = () => {
+			submitForm(DOMmain,DOMwrapModal,DOMinputEmail,DOMinputPass);
+		};
+		DOMauthButton.addEventListener('click', submitEvent);
+	}
+	//публичные методы главного компонента
+	return {
+		setLogAndPass : setLogAndPass,
+		initComponent: initComponent
+	}
 })();
+
