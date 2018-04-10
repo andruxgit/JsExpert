@@ -1,6 +1,7 @@
-
+'use strict';
 (function() {
-	let btn = document.querySelector("#play");
+
+    let btn1 = document.querySelector('#play');
 	let DOMElementsLine = document.querySelector('#first-line');
 	let DOMElementCounter = document.querySelector("#countElements");
 	let DomSelectElem = document.querySelector('#selectSort');
@@ -81,7 +82,7 @@
 		    },
 		    addedElements: visibleArr.length,
 			arrElements: visibleArr,
-			 sortAb: ()=>{
+            sortAb: ()=>{
 				return visibleArr.sort((a,b) => {
 					return a.name > b.name
 				})
@@ -95,7 +96,7 @@
 					return (new Date(a.date).getTime()) < (new Date(b.date).getTime())
 				})
 			},
-			sortNewOld: () => {
+			sortOldFirst: () => {
 				return visibleArr.sort((a,b) => {
 					return (new Date(a.date).getTime()) > (new Date(b.date).getTime())
 				})
@@ -106,7 +107,7 @@
 	let galeryElements = getVisibleArr();
 	//разная сортировка элементов по выбранному виду сортировки
 	const getMethodSort = (num) => {
-		localStorage['valSortStorage'] = num;
+		localStorage.setItem('valSortStorage', num);
 		let arrGallery = [];
 		if (num === '1') {
 			arrGallery = galeryElements.sortAb();
@@ -118,7 +119,7 @@
 			arrGallery = galeryElements.sortNewFirst();
 		}
 		else if (num === '4') {
-			arrGallery = galeryElements.sortNewOld();
+			arrGallery = galeryElements.sortOldFirst();
 		}
 		else{
 			arrGallery = galeryElements.arrElements;
@@ -131,7 +132,7 @@
 	const addElem = () => {
 		counter.increment();
 		if ((counter.value()) > data.length - 1){
-				return jQuery("#myModalBox").modal('show');
+				return $("#myModalBox").modal('show');
 		}
         if ((counter.value()) <= data.length - 1) {
 			const addObj = data[counter.value()];
@@ -145,12 +146,12 @@
 			}
 		}
 		if (counter.value() === data.length - 1) {
-        	btn.textContent = `Галерея закончилась`;
-        	btn.style.backgroundColor = 'grey';
+        	btn1.textContent = `Галерея закончилась`;
+        	btn1.style.backgroundColor = 'grey';
         }
 	};
 	//удаление элемента галереи
-	const delElem = (event) => {
+	const delElement = (event) => {
 		const target = event.target.tagName;
 		if (target === 'BUTTON') {
 			galeryElements.delElem(event.target.id);
@@ -165,8 +166,8 @@
 			valSortFromStorage = localStorage['valSortStorage'];
 		}
 	});
-	btn.addEventListener("click", addElem);
-	DOMElementsLine.addEventListener("click", delElem);
+	btn1.addEventListener("click", addElem);
+	DOMElementsLine.addEventListener("click", delElement);
 	console.log('start sort');
 	DomSelectElem.addEventListener('change', () => getMethodSort(DomSelectElem.value));
 })();

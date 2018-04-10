@@ -1,0 +1,158 @@
+ <!DOCTYPE html>
+ <html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<title>Форма входа</title>
+	  
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+	  
+	<link href="css/style.css" rel="stylesheet">
+
+  </head>
+  
+<body>
+<div class="modal fade" id="myModalBox">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div id="myModalBoxText" class="modal-body">
+				Modal body..
+			</div>
+		</div>
+	</div>
+</div>
+<!--********-->
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-light  border-bottom box-shadow">
+	<h5 class="my-0 mr-md-auto font-weight-normal">JSExpert</h5>
+	<nav class="my-2 my-md-0 mr-md-3">
+		<a id="navLinkGallery" class="p-2 text-dark hide" href="#">Галлерея</a>
+		<a id="navInfoUser" class="p-2 text-dark hide" href="#">О пользователе</a>
+	</nav>
+	<a  id="navBtnExit" class="btn btn-outline-primary hide" href="#">Выход</a>
+	</div>
+  <!--************************************************************************************-->
+  <main id="loginPage" class="text-center " role="main">
+	<div id="loginInfoAlert" class="alert alert-danger hidden" role="alert">
+	Lorem ipsum dolor sit amet.
+	</div>
+	<form class="form-signin">
+	   
+		<h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
+		<label for="inputLogin" class="sr-only">Email</label>
+		<input type="text" id="inputLogin" value="a@a.ru" class="form-control" placeholder="Email address" required=""
+			 autofocus=""  autocomplete="off">
+		<div class="mb-3"></div>
+		<label for="inputPass" class="sr-only">Пароль</label>
+		<input type="text" id="inputPass" value="123" class="form-control" placeholder="Password" required=""
+			 autocomplete="off">
+		<div class="mb-3"></div>
+		<button id="btnInput" class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+		<p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+	</form>
+  </main>
+  <!--****************************--> 
+  <div class="container col-6 mb-5 "></div>
+  <div id="pageInfoUser" class="container col-lg-6 col-sm-12  mb-2 hide" >
+	<h3 class="user-info text-center ">Информация о пользователе</h3>
+	<div class="row mb-3">
+		<div class="col-lg-6 col-12">
+			<label for="fieldInfLogin">Логин</label>
+			<input type="email" readonly class="form-control disable" id="fieldInfLogin" placeholder="email@mail.com">
+		</div>
+		<div class="col">
+			<label for="fieldInfPass">Пароль</label>
+			<div class="input-group">
+				<input type="password" readonly class="form-control disable" id="fieldInfPass" placeholder="password">
+				<div class="input-group-append ">
+					<button class="btn btn-primary" type="button" id="btnVisiblePass">Показать пароль</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container col-6">
+		<button type="button" class="btn btn-primary btn-block" id="btnBackToGallery">Вернуться в галерею</button>
+	</div>
+  </div>
+  <!--****************************-->
+  <main id="pageGallery" class="hide" role="main">
+	<section class="jumbotron text-center">
+		<div class="container">
+			<h1 class="jumbotron-heading">Автомобильная галерея</h1>
+				<p class="lead text-muted">
+					На этой странице вы можете увидеть отличную галлерею, которая дает вам возможность ознакомится с нашим
+					каталогом транспортных средств.
+				</p>
+
+			<div class="container col">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="btn-group">
+							<button type="button" id="btnAddElement" class="btn btn-primary" title
+								  data-original-title="Добавить одно изображение">
+									Добавить изображение
+							</button>
+						</div>
+                    </div>
+				</div>
+                <p class="count-text mb-2 ">Добавленно изображений: <span id="addCount">0</span></p>
+                <p class="count-text mb-2">Удалено изображений: <span id="delCount">0</span></p>
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+						<div class="btn-group" id="dropdown-name">
+							<button type="button" id="btnSotName" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+										 aria-haspopup="true" aria-expanded="false">
+							Фильтровать по имени
+							</button>
+							<div class="dropdown-menu">
+								<a id="aSortName" class="dropdown-item" href="#">Вперед: от А до Я</a>
+								<a id="aSortNameRevers" class="dropdown-item" href="#">Назад: от Я до А</a>
+							</div>
+						</div>
+					</div>
+						<div class="col-md-6">
+						<div class="btn-group" id="dropdown-date">
+							<button type="button" id="btnSortAge" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+										aria-haspopup="true" aria-expanded="false">
+								Фильтровать по дате
+							</button>
+							<div class="dropdown-menu">
+								<a id="aSortNew" class="dropdown-item new" href="#">Сначала новые</a>
+								<a id="aSortOld" class="dropdown-item old" href="#">Сначала старые</a>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	   
+	</section>
+
+	<div class="album py-5 bg-light">
+		<div class="container">
+			<div class="row" id="elementsGallery">
+			</div>
+		</div>
+	</div>
+  </main>
+
+
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+		 integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+  <script src="https://getbootstrap.com/assets/js/vendor/popper.min.js"></script>
+  <script src="https://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+
+
+  <script src=js/data.js></script>
+  <script src=js/validator.js></script>
+  <script src=js/gallery.js></script>
+  <script src=js/login.js></script>
+  <script src=js/main.js></script>
+  
+ </body>
+ 
+</html>
