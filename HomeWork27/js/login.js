@@ -33,7 +33,6 @@ LoginForm.prototype = {
 
         this.btnBackToGallery.addEventListener('click', this.linkGallery.bind(this));
         this.btnVisiblePass.addEventListener('click', this.visiblePass.bind(this));
-
 	},
     visiblePass: function () {
          this.fieldInfPass.type = (this.fieldInfPass.type === 'text') ? 'password' : 'text';
@@ -60,6 +59,7 @@ LoginForm.prototype = {
     },
     lnkExit: function () {
         document.location.reload(true);
+        localStorage.setItem('authorization','');
         this.pageGallery.classList.add('hide');
         this.pageInfoUser.classList.add('hide');
         this.loginPage.classList.remove('hide');
@@ -80,27 +80,5 @@ LoginForm.prototype = {
 
 };
 
-// let date = new Date(new Date().getTime() + 2600000 * 1000);
-// $(function(){
-//    $.cookie('authorization', 'success');
-// });
-//document.cookie = "authorization=success; path=/; expires=" + date.toUTCString();
-//document.cookie = updatedCookie;
-// if (this.checkSuccessAuthorization()) {
-//     this.closeInfoPage()
-// }
-// checkSuccessAuthorization: function () {
-//     function getCookie(name) {
-//         let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + "=([^;]*)"));
-//         return matches ? decodeURIComponent(matches[1]) : undefined;
-//     }
-//     return getCookie('authorization') === 'success'
-// },
-//     checkSuccessAuthorization: function () {
-//     function getCookie(name) {
-//         let matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + "=([^;]*)"));
-//         return matches ? decodeURIComponent(matches[1]) : undefined;
-//     }
-//     return getCookie('authorization') === 'success'
-// },
+
 

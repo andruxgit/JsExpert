@@ -120,10 +120,3 @@ Gallery.prototype = {
         }, '');
     },
 };
-// this.arrHideEl = this.data.map((item)=>{
-//     return Object.assign({}, item)
-// })
-// testG: function (str) {
-//    document.querySelector('#myModalBoxText').innerHTML = str;
-//    $("#myModalBox").modal('show');
-// },
